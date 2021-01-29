@@ -24,14 +24,14 @@ $().ready(function () {
                 console.log(response);
                 var nameCity = $(".list");
                 nameCity.appendTo("<li>" + searchValue.name + "<li>");
-
+                
 
             // $(`
-            // <h3>${data.name}</h3>
-            // <p>Wind Speed: ${data.wind.speed}</p>
-            // <p>Humidity: ${data.main.humidity}<p>
-            // <p>Temperature: ${data.main.temp}<p>
-            // <img> ${data.weather[0].icon}<img>
+            // <h3>${response.name}</h3>
+            // <p>Wind Speed: ${response.wind.speed}</p>
+            // <p>Humidity: ${response.main.humidity}<p>
+            // <p>Temperature: ${response.main.temp}<p>
+            // <img> ${response.weather[0].icon}<img>
             // `).appendTo('#today');
             })
     };
@@ -45,8 +45,12 @@ $().ready(function () {
                 console.log(queryURL2);
                 console.log(response);
 
-                $("#forecast").appendTo($("<p>").text("Temperature: " + main.temp_max + " °F"));
-                $("#forecast").appendTo($("<p>").text("Humidity: " + main.humidity + "%"));
+                // $("#forecast").appendTo($("<p>").text("Temperature: " + response.main.temp_max + " °F"));
+                // $("#forecast").appendTo($("<p>").text("Humidity: " + response.main.humidity + "%"));
             })
     };
+
+    function uvIndex(searchValue) {
+
+    }
 });

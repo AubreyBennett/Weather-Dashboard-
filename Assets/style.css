@@ -1,0 +1,8 @@
+.jumbotron {
+    background-color: rgb(9, 9, 58);
+    color: white;
+}
+.row {
+    text-align: center;
+    display: flex;
+}
