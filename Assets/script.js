@@ -11,7 +11,8 @@ $().ready(function () {
         console.log(searchValue);
 
         weather(searchValue);
-        forecast(searchValue)
+        // forecast(searchValue);
+        // uvIndex(searchValue);
     })
 
     function weather(searchValue) {
@@ -38,33 +39,42 @@ $().ready(function () {
             "<h3><strong>Wind Speed</strong>: " + response.wind.speed + "</h3>";
 
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // function forecast(searchValue) {
+    //     var queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=" + authKey + "&units=imperial";
 
-    function forecast(searchValue) {
-        var queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=" + authKey + "&units=imperial";
 
-
-        $.ajax({ url: queryURL2, method: "GET" })
-            .done(function (response2) {
-                console.log(queryURL2);
-                console.log(response2);
-                var widget = show(response2);
+    //     $.ajax({ url: queryURL2, method: "GET" })
+    //         .done(function (response2) {
+    //             console.log(queryURL2);
+    //             console.log(response2);
+    //             var widget = show(response2);
                 
-                $("#forecast").html(widget);
+    //             $("#forecast").html(widget);
 
-                $("search-value").val("");
-            })
-    };
-    function show(response2) {
-        for (var i = 0; i < response2.list.length; i++) {
-            if (response2.list[i].dt_txt.indexOf("15:00:00") !== -1) {
-            return "<h5><strong>Date</strong>: " + new Date(response2.list[i].dt_txt).toLocaleDateString() + "</h5>" +
-            "<p><strong>Temp</strong>: " + response2.list[i].main.temp_max + " °F" + "</p>" +
-            "<p><strong>Humidity</strong>: " + response2.list[i].main.humidity + " %" + "</p>";
-            }
-        }
-    }
+    //             $("search-value").val("");
+    //         })
+    // };
+    // function show(response2) {
+    //     for (var i = 0; i < response2.list.length; i++) {
+    //         if (response2.list[i].dt_txt.indexOf("15:00:00") !== -1) {
+    //         return "<h5><strong>Date</strong>: " + new Date(response2.list[i].dt_txt).toLocaleDateString() + "</h5>" +
+    //         "<p><strong>Temp</strong>: " + response2.list[i].main.temp_max + " °F" + "</p>" +
+    //         "<p><strong>Humidity</strong>: " + response2.list[i].main.humidity + " %" + "</p>";
+    //         }
+    //     }
+    // }
 
-    function uvIndex(searchValue) {
+    // function uvIndex(lat, lon) {
+    //     var queryURL3 = "http://api.openweathermap.org/data/2.5/uvi?appid=3ad2a623d22d47f4e85f5b8ef6a5d5a6=" + lat + "&lon=" + lon;
 
-    }
+    //     $.ajax({ url: queryURL3, method: "GET" })
+    //         .done(function (response3) {
+    //             console.log(queryURL3);
+    //             console.log(response3);
+
+    //             "<p>UV Index: " + "</p>" +
+    //             "<span>" + response3.value + "</span>";
+    //     })
+    // }
 });
