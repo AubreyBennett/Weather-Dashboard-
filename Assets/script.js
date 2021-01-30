@@ -22,19 +22,24 @@ $().ready(function () {
             .done(function (response) {
                 console.log(queryURL);
                 console.log(response);
-                var nameCity = $(".list");
-                nameCity.appendTo("<li>" + searchValue.name + "<li>");
-                
+                var widget = show(response);
 
-            // $(`
-            // <h3>${response.name}</h3>
-            // <p>Wind Speed: ${response.wind.speed}</p>
-            // <p>Humidity: ${response.main.humidity}<p>
-            // <p>Temperature: ${response.main.temp}<p>
-            // <img> ${response.weather[0].icon}<img>
-            // `).appendTo('#today');
+                $("#today").html(widget);
+
+                $("search-value").val("");
+                // var nameCity = $(".list");
+                // nameCity.appendTo("<li>" + searchValue.name + "<li>");
             })
     };
+    function show(response) {
+        return "<h2>Current Weather for " + response.name + ", " + " (" + new Date().toLocaleDateString() + ")" +"</h2>" +
+        "<h3><strong>Weather</strong>: "+ response.weather[0].main + "</h3>" +
+        "<h3><strong>Description</strong>: "+ response.weather[0].description + "</h3>" +
+        "<h3><strong>Temperature</strong>: "+ response.main.temp + " °F" +"</h3>" +
+        "<h3><strong>Humidity</strong>: "+ response.main.humidity + " %" +"</h3>" +
+        "<h3><strong>Wind Speed</strong>: "+ response.wind.speed + "</h3>";
+
+        }
 
     function forecast(searchValue) {
         var queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=" + authKey + "&units=imperial";
