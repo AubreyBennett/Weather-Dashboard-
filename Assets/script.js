@@ -1,36 +1,48 @@
 $().ready(function () {
+    
+    if (localStorage.getItem('recentSearches') === null) {
+        var recentSearches = [];
+        localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+    } else {
+        var recentSearches = JSON.parse(localStorage.getItem('recentSearches'));
+    }
+    console.log();
+
     var authKey = "3ad2a623d22d47f4e85f5b8ef6a5d5a6";
 
     var searchValue = $("#search-input");
     var searchButton = $("#search-button");
+    var response = "";
 
     $("#search-button").on("click", function (event) {
         event.preventDefault();
 
         searchValue = $("#search-value").val().trim();
         console.log(searchValue);
-
         weather(searchValue);
-        // forecast(searchValue);
-        // uvIndex(searchValue);
+        forecast(searchValue);  
+        uvIndex(response.city.coord.lat, response.city.coord.lon);
+        
     })
 
     function weather(searchValue) {
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&appid=" + authKey + "&units=imperial";
-
-
         $.ajax({ url: queryURL, method: "GET" })
             .done(function (response) {
                 console.log(queryURL);
                 console.log(response);
-                var widget = show(response);
+                //write a new function that will 
+                var widget = showWeather(response);
 
                 $("#today").html(widget);
-
                 $("search-value").val("");
+
+                recentSearches.push([searchValue]);
+                localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
             })
     };
-    function show(response) {
+
+    function showWeather(response) {
         return "<h2>Current Weather for " + response.name + ", " + " (" + new Date().toLocaleDateString() + ")" + "</h2>" +
             "<h3><strong>Weather</strong>: " + response.weather[0].main + "</h3>" +
             "<h3><strong>Description</strong>: " + response.weather[0].description + "</h3>" +
@@ -39,42 +51,55 @@ $().ready(function () {
             "<h3><strong>Wind Speed</strong>: " + response.wind.speed + "</h3>";
 
     }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // function forecast(searchValue) {
-    //     var queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=" + authKey + "&units=imperial";
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    function forecast(searchValue) {
+        var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=" + authKey + "&units=imperial";
+        $.ajax({ url: queryURL, method: "GET" })
+            .done(function (res) {
+                console.log(queryURL);
+                console.log(res);
+                var widget = showForecast(res);
 
+                $("#forecast").html(widget);
 
-    //     $.ajax({ url: queryURL2, method: "GET" })
-    //         .done(function (response2) {
-    //             console.log(queryURL2);
-    //             console.log(response2);
-    //             var widget = show(response2);
-                
-    //             $("#forecast").html(widget);
+                $("search-value").val("");
+            });
+    };
 
-    //             $("search-value").val("");
-    //         })
-    // };
-    // function show(response2) {
-    //     for (var i = 0; i < response2.list.length; i++) {
-    //         if (response2.list[i].dt_txt.indexOf("15:00:00") !== -1) {
-    //         return "<h5><strong>Date</strong>: " + new Date(response2.list[i].dt_txt).toLocaleDateString() + "</h5>" +
-    //         "<p><strong>Temp</strong>: " + response2.list[i].main.temp_max + " °F" + "</p>" +
-    //         "<p><strong>Humidity</strong>: " + response2.list[i].main.humidity + " %" + "</p>";
-    //         }
-    //     }
-    // }
+    function showForecast(res) {
+        console.log(res);
+        for (var i = 0; i < res.list.length; i++) {
+            if (res.list[i].dt_txt.indexOf("15:00:00") !== -1) {
+            return "<h5><strong>Date</strong>: " + new Date(res.list[i].dt_txt).toLocaleDateString() + "</h5>" +
+            // "<img>" + "src" + "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png" + "</img>" +
+            "<img>" + "https://openweathermap.org/img/w/" + res.list[i].weather[0].icon + ".png" +
+            "<p><strong>Temp</strong>: " + res.list[i].main.temp_max + " °F" + "</p>" +
+            "<p><strong>Humidity</strong>: " + res.list[i].main.humidity + " %" + "</p>";
+            }
+        }
+    };
 
-    // function uvIndex(lat, lon) {
-    //     var queryURL3 = "http://api.openweathermap.org/data/2.5/uvi?appid=3ad2a623d22d47f4e85f5b8ef6a5d5a6=" + lat + "&lon=" + lon;
+    function uvIndex(lat, lon) {
+        var queryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=3ad2a623d22d47f4e85f5b8ef6a5d5a6=" + lat + "&lon=" + lon;
 
-    //     $.ajax({ url: queryURL3, method: "GET" })
-    //         .done(function (response3) {
-    //             console.log(queryURL3);
-    //             console.log(response3);
+        $.ajax({ url: queryURL, method: "GET" })
+            .done(function (response) {
+                console.log(queryURL);
+                console.log(response);
+                var widget = showUvIndex(response);
 
-    //             "<p>UV Index: " + "</p>" +
-    //             "<span>" + response3.value + "</span>";
-    //     })
-    // }
+                var lat = response.city.coord.lat;
+                var lon = response.city.coord.lon;
+
+                $("#today").html(widget);
+                $("search-value").val("");
+
+                "<p>UV Index: " + "</p>" +
+                "<span>" + response.value + "</span>";
+        })
+    };
+
+    function showUvIndex(response) {
+        console.log(response);
+    }
 });
