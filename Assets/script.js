@@ -3,7 +3,7 @@ $().ready(function () {
 
     var searchValue = $("#search-input");
     var searchButton = $("#search-button");
-    
+
     $("#search-button").on("click", function (event) {
         event.preventDefault();
 
@@ -27,33 +27,42 @@ $().ready(function () {
                 $("#today").html(widget);
 
                 $("search-value").val("");
-                // var nameCity = $(".list");
-                // nameCity.appendTo("<li>" + searchValue.name + "<li>");
             })
     };
     function show(response) {
-        return "<h2>Current Weather for " + response.name + ", " + " (" + new Date().toLocaleDateString() + ")" +"</h2>" +
-        "<h3><strong>Weather</strong>: "+ response.weather[0].main + "</h3>" +
-        "<h3><strong>Description</strong>: "+ response.weather[0].description + "</h3>" +
-        "<h3><strong>Temperature</strong>: "+ response.main.temp + " °F" +"</h3>" +
-        "<h3><strong>Humidity</strong>: "+ response.main.humidity + " %" +"</h3>" +
-        "<h3><strong>Wind Speed</strong>: "+ response.wind.speed + "</h3>";
+        return "<h2>Current Weather for " + response.name + ", " + " (" + new Date().toLocaleDateString() + ")" + "</h2>" +
+            "<h3><strong>Weather</strong>: " + response.weather[0].main + "</h3>" +
+            "<h3><strong>Description</strong>: " + response.weather[0].description + "</h3>" +
+            "<h3><strong>Temperature</strong>: " + response.main.temp + " °F" + "</h3>" +
+            "<h3><strong>Humidity</strong>: " + response.main.humidity + " %" + "</h3>" +
+            "<h3><strong>Wind Speed</strong>: " + response.wind.speed + "</h3>";
 
-        }
+    }
 
     function forecast(searchValue) {
         var queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=" + authKey + "&units=imperial";
 
-        
-        $.ajax({ url: queryURL2, method: "GET" })
-            .done(function (response) {
-                console.log(queryURL2);
-                console.log(response);
 
-                // $("#forecast").appendTo($("<p>").text("Temperature: " + response.main.temp_max + " °F"));
-                // $("#forecast").appendTo($("<p>").text("Humidity: " + response.main.humidity + "%"));
+        $.ajax({ url: queryURL2, method: "GET" })
+            .done(function (response2) {
+                console.log(queryURL2);
+                console.log(response2);
+                var widget = show(response2);
+                
+                $("#forecast").html(widget);
+
+                $("search-value").val("");
             })
     };
+    function show(response2) {
+        for (var i = 0; i < response2.list.length; i++) {
+            if (response2.list[i].dt_txt.indexOf("15:00:00") !== -1) {
+            return "<h5><strong>Date</strong>: " + new Date(response2.list[i].dt_txt).toLocaleDateString() + "</h5>" +
+            "<p><strong>Temp</strong>: " + response2.list[i].main.temp_max + " °F" + "</p>" +
+            "<p><strong>Humidity</strong>: " + response2.list[i].main.humidity + " %" + "</p>";
+            }
+        }
+    }
 
     function uvIndex(searchValue) {
 
