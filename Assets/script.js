@@ -8,6 +8,30 @@ $().ready(function () {
     }
     console.log();
 
+    function displayChips(array) {
+
+        $("#chip-container").empty()
+
+        for (var i = 0; i < array.length; i++) {
+            const element = array[i];
+
+            var chip = $("<div>").addClass("chip").text(element)
+            $("#chip-container").append(chip)
+        }
+    }
+
+    function isSaved(searchValue) {
+        var localSearches = JSON.parse(localStorage.getItem('recentSearches'))
+        
+        for (var i = 0; i < localSearches.length; i++) {
+            if(searchValue.toLowerCase().trim() === localSearches[0][1] ) {
+                return true;
+            }
+        }
+        return false;
+        
+    }
+
     var authKey = "3ad2a623d22d47f4e85f5b8ef6a5d5a6";
 
     var searchValue = $("#search-input");
@@ -40,6 +64,13 @@ $().ready(function () {
                 recentSearches.push([searchValue]);
                 localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
             })
+            if (isSaved(searchValue) === false ) {
+                recentSearches.push([searchValue]);
+                localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
+            }
+    
+    
+            displayChips(recentSearches)
     };
 
     function showWeather(response) {
