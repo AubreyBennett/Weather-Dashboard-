@@ -1,5 +1,5 @@
 $().ready(function () {
-    
+
     if (localStorage.getItem('recentSearches') === null) {
         var recentSearches = [];
         localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
@@ -22,14 +22,14 @@ $().ready(function () {
 
     function isSaved(searchValue) {
         var localSearches = JSON.parse(localStorage.getItem('recentSearches'))
-        
+
         for (var i = 0; i < localSearches.length; i++) {
-            if(searchValue.toLowerCase().trim() === localSearches[0][1] ) {
+            if (searchValue.toLowerCase().trim() === localSearches[0][1]) {
                 return true;
             }
         }
         return false;
-        
+
     }
 
     var authKey = "3ad2a623d22d47f4e85f5b8ef6a5d5a6";
@@ -44,9 +44,9 @@ $().ready(function () {
         searchValue = $("#search-value").val().trim();
         console.log(searchValue);
         weather(searchValue);
-        forecast(searchValue);  
-        uvIndex(response.city.coord.lat, response.city.coord.lon);
-        
+        forecast(searchValue);
+        // uvIndex(response.city.coord.lat, response.city.coord.lon);
+
     })
 
     function weather(searchValue) {
@@ -64,13 +64,13 @@ $().ready(function () {
                 recentSearches.push([searchValue]);
                 localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
             })
-            if (isSaved(searchValue) === false ) {
-                recentSearches.push([searchValue]);
-                localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
-            }
-    
-    
-            displayChips(recentSearches)
+        if (isSaved(searchValue) === false) {
+            recentSearches.push([searchValue]);
+            localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
+        }
+
+
+        displayChips(recentSearches)
     };
 
     function showWeather(response) {
@@ -99,15 +99,17 @@ $().ready(function () {
 
     function showForecast(res) {
         console.log(res);
+        $("#forecast").empty();
         for (var i = 0; i < res.list.length; i++) {
             if (res.list[i].dt_txt.indexOf("15:00:00") !== -1) {
-            return "<h5><strong>Date</strong>: " + new Date(res.list[i].dt_txt).toLocaleDateString() + "</h5>" +
-            // "<img>" + "src" + "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png" + "</img>" +
-            "<img>" + "https://openweathermap.org/img/w/" + res.list[i].weather[0].icon + ".png" +
-            "<p><strong>Temp</strong>: " + res.list[i].main.temp_max + " °F" + "</p>" +
-            "<p><strong>Humidity</strong>: " + res.list[i].main.humidity + " %" + "</p>";
+                return "<h5><strong>Date</strong>: " + new Date(res.list[i].dt_txt).toLocaleDateString() + "</h5>" +
+                    // "<img>" + "src" + "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png" + "</img>" +
+                    "<img>" + "https://openweathermap.org/img/w/" + res.list[i].weather[0].icon + ".png" +
+                    "<p><strong>Temp</strong>: " + res.list[i].main.temp_max + " °F" + "</p>" +
+                    "<p><strong>Humidity</strong>: " + res.list[i].main.humidity + " %" + "</p>";
             }
         }
+        $("#forecast").append(fiveDayDiv);
     };
 
     function uvIndex(lat, lon) {
@@ -126,8 +128,8 @@ $().ready(function () {
                 $("search-value").val("");
 
                 "<p>UV Index: " + "</p>" +
-                "<span>" + response.value + "</span>";
-        })
+                    "<span>" + response.value + "</span>";
+            })
     };
 
     function showUvIndex(response) {
