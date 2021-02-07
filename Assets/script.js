@@ -109,7 +109,7 @@ $(document).ready(function () {
     };
     // Today's UV Index
     function uvIndex(lat, lon) {
-        var queryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=3ad2a623d22d47f4e85f5b8ef6a5d5a6" + "&lat=" + lat + "&lon=" + lon;
+        var queryURL = "https://api.openweathermap.org/data/2.5/uvi?appid=3ad2a623d22d47f4e85f5b8ef6a5d5a6" + "&lat=" + lat + "&lon=" + lon;
 
         $.ajax({ url: queryURL, method: "GET" })
             .done(function (response) {
